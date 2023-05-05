@@ -8,7 +8,7 @@ const matches = books;
 function createPreview({ author, id, image, title }) {
   const preview = document.createElement("div");
   preview.classList.add("preview");
-  const kat = /html/ `
+  const kat = /*html*/ `
     <div class="preview__info">
       <img class="preview__image" src="${image}">
       <h1 class="preview__title">${title}</h1>
@@ -124,7 +124,42 @@ headerButton.addEventListener("click", (event) => {
     const searchOverlay = document.querySelector("[data-search-overlay]");
     searchOverlay.open = false;
   });
-});
+
+  const formData = new FormData(event.target)
+  const filters = Object.fromEntries(formData)
+  const result = []
+
+
+for (const book of books) {
+  const titleMatch = !filters.title.trim() || book.title.toLowerCase().includes(filters.title.toLowerCase())
+  const authorMatch = filters.author === 'any' || book.author === filters.author
+  let genreMatch = true
+
+
+  if (filters.genre !== 'any') {
+      genreMatch = false
+      for (const genre of book.genres) {
+          if (genre === filters.genre) {
+              genreMatch = true
+              break
+          }
+      }
+  }
+
+
+  if (titleMatch && authorMatch && genreMatch) {
+      result.push(book)
+  }
+}
+
+actions.classList.display(result)
+if (result.length < 1) {
+  document.querySelector('[data-list-message]').classList.add('list__message_show')
+} else {
+  document.querySelector('[data-list-message]').classList.remove('list__message_show')
+}
+})
+
 
 
 // Helper function to create dropdown options
