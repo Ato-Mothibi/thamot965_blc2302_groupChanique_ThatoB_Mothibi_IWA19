@@ -142,3 +142,22 @@ function createDropdownOptions(parentElement, options, defaultOption) {
 }
 
 
+// Drop down for genres
+const dataSearchGenres = document.querySelector("[data-search-genres]");
+const allGenresOption = document.createElement("option"); 
+allGenresOption.value = "any"; 
+allGenresOption.innerText = "All Genres"; 
+dataSearchGenres.appendChild(allGenresOption); 
+for (const [id, names] of Object.entries(genres)) {
+    const element = document.createElement("option"); 
+    element.value = id; 
+    element.innerText = names; 
+    dataSearchGenres.appendChild(element); 
+}
+
+for (const [id, names] of Object.entries(genres)) {
+    const element = document.createElement("option"); 
+    element.value = id; 
+    element.innerText = names; 
+    dataSearchGenres.appendChild(element); 
+}
