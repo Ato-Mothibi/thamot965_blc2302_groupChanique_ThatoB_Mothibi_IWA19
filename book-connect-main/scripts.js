@@ -193,4 +193,22 @@ settingsBtn.addEventListener('click', (event) => {
   });
 
 
-  
+//--------------------Changing themes-----------------------------
+const dataSettingsTheme = document.querySelector('[data-settings-theme]')
+const saveButton = document.querySelector("body > dialog:nth-child(5) > div > div > button.overlay_button.overlay_button_primary")
+saveButton.addEventListener('click', (event) =>{
+    event.preventDefault()
+  if (dataSettingsTheme.value === 'day') {
+    document.querySelector('body').style.setProperty('--color-dark', day.dark)
+    document.querySelector('body').style.setProperty('--color-light', day.light)
+  }
+  document.querySelector("[data-settings-overlay]").style.display = "none";
+  if (dataSettingsTheme.value === 'night') {
+    document.querySelector('body').style.setProperty('--color-dark', night.dark)
+    document.querySelector('body').style.setProperty('--color-light', night.light)
+     }
+     document.querySelector("[data-settings-overlay]").style.display = "none";
+} )
+document.addEventListener(saveButtonToggle)
+
+})  
