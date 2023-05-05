@@ -23,29 +23,49 @@ function createPreview({ author, id, image, title }) {
 let fragment = document.createDocumentFragment();
 
 
-for ([id, name]; Object.entries(genres); i++) {
-    document.createElement('option')
-    element.value = value
-    element.innerText = text
-    genres.appendChild(element)
+const extracted = books.slice(0, 36);
+for (const { author, title, image, id } of extracted) {
+  const preview = createPreview({ author, id, image, title });
+  fragment.appendChild(preview);
 }
 
-data-search-genres.appendChild(genres)
+const dataListItems = document.querySelector("[data-list-items]");
+dataListItems.appendChild(fragment);
 
-authors = document.createDocumentFragment()
-element = document.createElement('option')
-element.value = 'any'
-element.innerText = 'All Authors'
-authors.appendChild(element)
+const moreBooks = document.querySelector("[data-list-button]");
+let showMore = page * BOOKS_PER_PAGE;
 
-for ([id, name];Object.entries(authors); id++) {
-    document.createElement('option')
-    element.value = value
-    element = text
-    authors.appendChild(element)
-}
+moreBooks.innerHTML = /* html */ [
+    `<span>Show more</span>`,
+    `<span class="list__remaining">${
+      matches.length - showMore > 0 ? matches.length - showMore : 0}</span>`,
+    ]
 
-data-search-authors.appendChild(authors)
+// show more books button
+moreBooks.addEventListener("click", () => {
+  const dataListItems = document.querySelector("[data-list-items]");
+  const remaining = matches.slice(showMore, matches.length);
+  const fragment = document.createDocumentFragment();
+
+  for (const { author, title, image, id } of remaining) {
+    const preview = createPreview({ author, id, image, title });
+    fragment.appendChild(preview);
+  }
+
+
+
+  dataListItems.appendChild(fragment);
+  showMore += remaining.length;
+  moreBooks.disabled = !(matches.length - showMore > 0);
+  moreBooks.innerHTML = /* html */ `
+    <span>Show more</span>
+    <span class="list__remaining">${
+      matches.length - showMore > 0 ? matches.length - showMore : 0
+    }</span>
+  `;
+});
+
+
 
 data-settings-theme.value === window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'day'
 v = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches? 'night' | 'day'
