@@ -71,6 +71,20 @@ document.querySelector('[data-list-items]').addEventListener('click', (event) =>
 });
 
 
+//Responsible for cancel in search
+document.querySelector('[data-search-cancel]').addEventListener('click', () => {
+  document.querySelector('[data-search-overlay]').open = false;
+});
+
+
+//Search modal show
+document.querySelector('[data-header-search]').addEventListener('click', () => {
+  document.querySelector('[data-search-overlay]').open = true ;
+  data-search-title.focus();
+})
+
+
+
 
 // Open the search button overlay
 const searchForm = document.createElement("form");
