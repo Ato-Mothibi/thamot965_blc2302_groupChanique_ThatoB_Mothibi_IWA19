@@ -127,3 +127,18 @@ headerButton.addEventListener("click", (event) => {
 });
 
 
+// Helper function to create dropdown options
+function createDropdownOptions(parentElement, options, defaultOption) {
+  const defaultOptionElement = document.createElement("option");
+  defaultOptionElement.value = "any";
+  defaultOptionElement.innerText = defaultOption;
+  parentElement.appendChild(defaultOptionElement);
+  for (const [id, name] of Object.entries(options)) {
+    const element = document.createElement("option");
+    element.value = id;
+    element.innerText = name;
+    parentElement.appendChild(element);
+  }
+}
+
+
