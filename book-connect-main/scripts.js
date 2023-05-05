@@ -105,3 +105,25 @@ document.querySelector("[data-list-items]").addEventListener("click", (event) =>
     });
     
 });
+
+
+// Open the search button overlay
+const searchForm = document.createElement("form");
+searchForm.classList.add("search-form");
+
+const headerButton = document.querySelector(".header__button");
+
+headerButton.addEventListener("click", (event) => {
+  event.preventDefault();
+  const searchOverlay = document.querySelector("[data-search-overlay]");
+  searchOverlay.showModal();
+
+  const cancelButton = document.querySelector("[data-search-cancel]");
+
+  cancelButton.addEventListener("click", () => {
+    const searchOverlay = document.querySelector("[data-search-overlay]");
+    searchOverlay.open = false;
+  });
+});
+
+
