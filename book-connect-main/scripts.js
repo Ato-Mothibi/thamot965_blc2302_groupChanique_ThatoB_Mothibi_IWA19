@@ -84,31 +84,96 @@ document.querySelector('[data-header-search]').addEventListener('click', () => {
 })
 
 
+// SEARCH BUTTON
+
+// Search specific books
+const searchFilter = document.querySelector('[data-search-form]')
+// add event listener to search form
+searchFilter.addEventListener('submit', (event)=>{
+    event.preventDefault();
+// hide book list
+   document.querySelector('[data-list-items]').style.display = 'none'
+// clear message area
+   document.querySelector('[data-list-message]').innerHTML = ''
+// get form data
+   const formData = new FormData(event.target)
+    const title1 = formData.get('title');
+    const genre1 = formData.get('genre');
+    const author1 = formData.get('author');
+// array to store filtered books
+const filteredBooks = [];
+// loop through all books
+for (let i = 0; i < books.length; i++) {
+  const book = books[i];
+  // if genre and author are not selected, filter by title only
+  if (genre1 === 'any' && author1 === 'any') {
+   if (book.title.toLowerCase().includes(title1.toLowerCase())){
+    filteredBooks.push(book);
+   }
+  }
+  // if genre is not selected, filter by title and author
+  if (genre1 === 'any') {
+    if (book.title.toLowerCase().includes(title1.toLowerCase()) && book.author === author1){
+     filteredBooks.push(book);
+    }
+   }
+   // if title is not entered, filter by author and genre
+   if (title1 === '') {
+    if (book.author === author1 && book.genres.includes(genre1)){
+     filteredBooks.push(book);
+    }
+   }
+   // if neither title nor author are selected, filter by genre only
+   if (title1 === '' && author1 === 'any' ) {
+    if (book.genres.includes(genre1)){
+     filteredBooks.push(book);
+    }
+   }
+   // display message if no books match filters
+   if (filteredBooks.length > 0){
+    document.querySelector('[data-list-message]').innerText = ''
+    document.querySelector('[data-list-button]').disabled = true
+    document.querySelector('[data-list-message]').style.marginTop = '-125px';
+   } else{
+    document.querySelector('[data-list-message]').innerText = 'No results found. Your filters might be too narrow.'
+    document.querySelector('[data-list-button]').disabled = true
+   }
+};
+
+// display filtered books
+document.querySelector('[class="list__message"]').style.display = 'block'
+// create fragment to hold filtered books
+const fragment2 = document.createDocumentFragment()
+    for (const {author ,image, title, id , description, published} of filteredBooks) {
+        const preview = document.createElement('button')
+        preview.className = 'preview'
+        preview.dataset.id = id
+        preview.dataset.title = title
+        preview.dataset.image = image
+        preview.dataset.subtitle = `${authors[author]} (${(new Date(published)).getFullYear()})`
+        preview.dataset.description = description
+        preview.dataset.genre = genres
+        // create preview button with book information
+        preview.innerHTML= /*html*/`
+        <div>
+        <image class='preview__image' src="${image}" alt="book pic"}/>
+        </div>
+        <div class='preview__info'>
+        <dt class='preview__title'>${title}<dt>
+        <dt class='preview__author'> By ${authors[author]}</dt>
+        </div>`
+// append preview button to fragment
+        fragment2.appendChild(preview)
+        }
+// add filtered books to message area
+    const booklist2 = document.querySelector('[class="list__message"]')
+    booklist2.append(fragment2)
+        document.querySelector('[data-search-form]').reset()
+        document.querySelector("[data-search-overlay]").close()
+    })
 
 
-// Open the search button overlay
-const searchForm = document.createElement("form");
-searchForm.classList.add("search-form");
-
-const headerButton = document.querySelector(".header__button");
-
-headerButton.addEventListener("click", (event) => {
-  event.preventDefault();
-  const searchOverlay = document.querySelector("[data-search-overlay]");
-  searchOverlay.showModal();
-
-  const cancelButton = document.querySelector("[data-search-cancel]");
-
-  cancelButton.addEventListener("click", () => {
-    const searchOverlay = document.querySelector("[data-search-overlay]");
-    searchOverlay.open = false;
-  });
-});
-
-
-
-
-// Helper function to create dropdown options
+//Dropdown options
 function createDropdownOptions(parentElement, options, defaultOption) {
   const defaultOptionElement = document.createElement("option");
   defaultOptionElement.value = "any";
@@ -123,7 +188,7 @@ function createDropdownOptions(parentElement, options, defaultOption) {
 }
 
 
-// Drop down for genres
+//  Select genres
 const dataSearchGenres = document.querySelector("[data-search-genres]");
 const allGenresOption = document.createElement("option"); 
 allGenresOption.value = "any"; 
@@ -144,7 +209,8 @@ for (const [id, names] of Object.entries(genres)) {
 }
 
 
-// Drop down for authors
+
+//Filter authors
 
 const dataSearchAuthors = document.querySelector("[data-search-authors]"); 
 const allAuthorsOption = document.createElement("option");
@@ -159,6 +225,37 @@ for (const [id, names] of Object.entries(authors)) {
 }
 
 
+document.querySelector('[data-settings-form]').addEventListener('submit', (event) => {
+event.preventDefault();
+actions.settings.submit();
+});
+
+
+// Closes the preview overlay
+document.querySelector('[data-list-close]').addEventListener('click', () => {
+  document.querySelector('[data-list-active]').open = false;
+});
+
+// Show more books on the list
+function createPreview({ author, id, image, title }) {
+    let element = document.createElement('button');
+    element.classList = 'preview';
+    element.setAttribute('data-preview', id);
+
+    element.innerHTML = /* html */ `
+        <img
+            class="preview__image"
+            src="${image}"
+        />
+      
+        <div class="preview__info">
+            <h3 class="preview__title">${title}</h3>
+            <div class="preview__author">"${authors[author]}"</div>
+        </div>
+    `;
+    return element;
+}
+
 // settings button for day and night
 const settingsBtn = document.querySelector('[data-header-settings]');
 settingsBtn.addEventListener('click', (event) => {
@@ -172,24 +269,34 @@ settingsBtn.addEventListener('click', (event) => {
     const themeOverlay = document.querySelector('[data-settings-overlay]');
     themeOverlay.close();
   });
+})
 
 
-//--------------------Changing themes-----------------------------
-const dataSettingsTheme = document.querySelector('[data-settings-theme]')
-const saveButton = document.querySelector("body > dialog:nth-child(5) > div > div > button.overlay_button.overlay_button_primary")
-saveButton.addEventListener('click', (event) =>{
-    event.preventDefault()
-  if (dataSettingsTheme.value === 'day') {
-    document.querySelector('body').style.setProperty('--color-dark', day.dark)
-    document.querySelector('body').style.setProperty('--color-light', day.light)
+// Enabling the Save Button to change the backgound
+const css = {
+  day: {
+    dark: '10, 10, 20',
+    light: '255, 255, 255',
+  },
+  night: {
+    dark: '255, 255, 255',
+    light: '10, 10, 20',
   }
-  document.querySelector("[data-settings-overlay]").style.display = "none";
-  if (dataSettingsTheme.value === 'night') {
-    document.querySelector('body').style.setProperty('--color-dark', night.dark)
-    document.querySelector('body').style.setProperty('--color-light', night.light)
-     }
-     document.querySelector("[data-settings-overlay]").style.display = "none";
-} )
-document.addEventListener(saveButtonToggle)
+}
 
-})  
+const form = document.getElementById('settings');
+const themeSelect = document.querySelector('[data-settings-theme]');
+
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const theme = themeSelect.value;
+
+  document.documentElement.style.setProperty('--color-dark', css[theme].dark);
+  document.documentElement.style.setProperty('--color-light', css[theme].light);
+});
+
+// Initialize theme based on user's OS theme preference
+const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+const initialTheme = prefersDarkMode ? 'night' : 'day';
+document.documentElement.style.setProperty('--color-dark', css[initialTheme].dark);
+document.documentElement.style.setProperty('--color-light', css[initialTheme].light);
