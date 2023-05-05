@@ -1,40 +1,27 @@
-matches = books
-page = 1;
+import { books, authors, BOOKS_PER_PAGE, genres } from "./data.js";
 
-if (!books && !Array.isArray(books)) throw new Error('Source required') 
-if (!range && range.length < 2) throw new Error('Range must be an array with two numbers')
+let page = 1;
+let range = books.length;
 
-day = {
-    dark: '10, 10, 20',
-    light: '255, 255, 255',
+const matches = books;
+
+function createPreview({ author, id, image, title }) {
+  const preview = document.createElement("div");
+  preview.classList.add("preview");
+  const kat = /html/ `
+    <div class="preview__info">
+      <img class="preview__image" src="${image}">
+      <h1 class="preview__title">${title}</h1>
+      <h2 class="preview__author">${authors[author]}</h2>
+    </div>
+  `;
+  preview.innerHTML = kat;
+  preview.dataset.preview = id; // add book ID as a data attribute to the preview element
+  return preview;
 }
 
-night = {
-    dark: '255, 255, 255',
-    light: '10, 10, 20',
-}
+let fragment = document.createDocumentFragment();
 
-fragment = document.createDocumentFragment()
-const extracted = books.slice(0, 36)
-
-for ({ author, image, title, id }; extracted; i++) {
-    const preview = createPreview({
-        author,
-        id,
-        image,
-        title
-    })
-
-    fragment.appendChild(preview)
-}
-
-data-list-items.appendChild(fragment)
-
-genres = document.createDocumentFragment()
-element = document.createElement('option')
-element.value = 'any'
-element = 'All Genres'
-genres.appendChild(element)
 
 for ([id, name]; Object.entries(genres); i++) {
     document.createElement('option')
