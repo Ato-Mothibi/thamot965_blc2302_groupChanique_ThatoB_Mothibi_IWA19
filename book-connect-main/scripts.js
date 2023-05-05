@@ -6,6 +6,12 @@ let range = books.length;
 const matches = books;
 
 function createPreview({ author, id, image, title }) {
+  const extracted = books.slice(0, 36);
+for (const { author, title, image, id } of extracted) {
+  const preview = createPreview({ author, id, image, title });
+  fragment.appendChild(preview);
+}
+  
   const preview = document.createElement("div");
   preview.classList.add("preview");
   const kat = /*html*/ `
@@ -23,11 +29,7 @@ function createPreview({ author, id, image, title }) {
 let fragment = document.createDocumentFragment();
 
 
-const extracted = books.slice(0, 36);
-for (const { author, title, image, id } of extracted) {
-  const preview = createPreview({ author, id, image, title });
-  fragment.appendChild(preview);
-}
+
 
 const dataListItems = document.querySelector("[data-list-items]");
 dataListItems.appendChild(fragment);
