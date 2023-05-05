@@ -176,3 +176,21 @@ for (const [id, names] of Object.entries(authors)) {
     element.innerText = names;
     dataSearchAuthors.appendChild(element);
 }
+
+
+// settings button for day and night
+const settingsBtn = document.querySelector('[data-header-settings]');
+settingsBtn.addEventListener('click', (event) => {
+  event.preventDefault();
+  
+  const themeOverlay = document.querySelector('[data-settings-overlay]');
+  themeOverlay.showModal();
+
+  const settingsCancelBtn = document.querySelector('[data-settings-cancel]');
+  settingsCancelBtn.addEventListener('click', () => {
+    const themeOverlay = document.querySelector('[data-settings-overlay]');
+    themeOverlay.close();
+  });
+
+
+  
