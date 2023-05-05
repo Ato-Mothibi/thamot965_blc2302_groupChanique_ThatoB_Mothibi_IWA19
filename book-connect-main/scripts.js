@@ -6,12 +6,6 @@ let range = books.length;
 const matches = books;
 
 function createPreview({ author, id, image, title }) {
-  const extracted = books.slice(0, 36);
-for (const { author, title, image, id } of extracted) {
-  const preview = createPreview({ author, id, image, title });
-  fragment.appendChild(preview);
-}
-  
   const preview = document.createElement("div");
   preview.classList.add("preview");
   const kat = /*html*/ `
@@ -29,7 +23,11 @@ for (const { author, title, image, id } of extracted) {
 let fragment = document.createDocumentFragment();
 
 
-
+const extracted = books.slice(0, 36);
+for (const { author, title, image, id } of extracted) {
+  const preview = createPreview({ author, id, image, title });
+  fragment.appendChild(preview);
+}
 
 const dataListItems = document.querySelector("[data-list-items]");
 dataListItems.appendChild(fragment);
@@ -126,41 +124,8 @@ headerButton.addEventListener("click", (event) => {
     const searchOverlay = document.querySelector("[data-search-overlay]");
     searchOverlay.open = false;
   });
+});
 
-  const formData = new FormData(event.target)
-  const filters = Object.fromEntries(formData)
-  const result = []
-
-
-for (const book of books) {
-  const titleMatch = !filters.title.trim() || book.title.toLowerCase().includes(filters.title.toLowerCase())
-  const authorMatch = filters.author === 'any' || book.author === filters.author
-  let genreMatch = true
-
-
-  if (filters.genre !== 'any') {
-      genreMatch = false
-      for (const genre of book.genres) {
-          if (genre === filters.genre) {
-              genreMatch = true
-              break
-          }
-      }
-  }
-
-
-  if (titleMatch && authorMatch && genreMatch) {
-      result.push(book)
-  }
-}
-
-actions.classList.display(result)
-if (result.length < 1) {
-  document.querySelector('[data-list-message]').classList.add('list__message_show')
-} else {
-  document.querySelector('[data-list-message]').classList.remove('list__message_show')
-}
-})
 
 
 
