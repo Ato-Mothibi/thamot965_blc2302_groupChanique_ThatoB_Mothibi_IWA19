@@ -161,3 +161,18 @@ for (const [id, names] of Object.entries(genres)) {
     element.innerText = names; 
     dataSearchGenres.appendChild(element); 
 }
+
+
+// Drop down for authors
+
+const dataSearchAuthors = document.querySelector("[data-search-authors]"); 
+const allAuthorsOption = document.createElement("option");
+allAuthorsOption.value = "any";
+allAuthorsOption.innerText = "All Authors";
+dataSearchAuthors.appendChild(allAuthorsOption);
+for (const [id, names] of Object.entries(authors)) {
+    const element = document.createElement("option");
+    element.value = id;
+    element.innerText = names;
+    dataSearchAuthors.appendChild(element);
+}
